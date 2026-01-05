@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background: linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0, #ff0080);
             background-size: 400% 400%;
             animation: gradientShift 8s ease infinite;
@@ -85,6 +85,14 @@
             max-width: 800px;
             display: block;
             border-radius: 15px;
+        }
+
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
         }
 
         button {
@@ -171,7 +179,7 @@
         </div>
 
         <div class="video-container">
-            <video id="videoPlayer" controls loop autoplay muted>
+            <video id="videoPlayer" loop autoplay muted playsinline webkit-playsinline>
                 <source src="https://ik.imagekit.io/Chan/HAPPY%20NEW%20YEAR_%E2%9C%8C%EF%B8%8F_.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -209,6 +217,12 @@
         // Auto-create some emojis on load
         window.addEventListener('load', () => {
             setTimeout(createEmojis, 500);
+            
+            // Force video to play inline on mobile
+            const video = document.getElementById('videoPlayer');
+            video.play().catch(err => {
+                console.log('Autoplay prevented:', err);
+            });
         });
     </script>
 </body>
