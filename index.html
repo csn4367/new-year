@@ -179,7 +179,7 @@
         </div>
 
         <div class="video-container">
-            <video id="videoPlayer" loop autoplay muted playsinline webkit-playsinline>
+            <video id="videoPlayer" loop autoplay playsinline webkit-playsinline>
                 <source src="https://ik.imagekit.io/Chan/HAPPY%20NEW%20YEAR_%E2%9C%8C%EF%B8%8F_.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -218,12 +218,24 @@
         window.addEventListener('load', () => {
             setTimeout(createEmojis, 500);
             
-            // Force video to play inline on mobile
+            // Try to play with sound, if blocked then mute and play
             const video = document.getElementById('videoPlayer');
-            video.play().catch(err => {
-                console.log('Autoplay prevented:', err);
-            });
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(err => {
+                    // Autoplay with sound was blocked, try muted
+                    video.muted = true;
+                    video.play();
+                });
+            }
         });
+        
+        // Unmute on first user interaction
+        document.addEventListener('click', () => {
+            const video = document.getElementById('videoPlayer');
+            video.muted = false;
+        }, { once: true });
     </script>
 </body>
 </html>
